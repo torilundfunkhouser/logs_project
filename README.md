@@ -7,7 +7,7 @@ To do this, we had to connect to a database, use SQL queries to analyze the log 
 2. Who are the most popular article authors of all time?
 3. On which days did more than 1% of requests lead to errors? 
 
-# Setting up for the project
+## Setting up the project
 1. Install vagrant (https://www.vagrantup.com/) and virtual box (https://www.virtualbox.org/wiki/Downloads) 
 2. Download the vagrant configuration files (FSND Virtual Machine - udacity logs projects). Save the folder on your desktop.
 3. Download the newsdata.sql file and place it into the vagrant directory
@@ -18,7 +18,7 @@ To do this, we had to connect to a database, use SQL queries to analyze the log 
 
 After taking these steps, you should be all set up to start answering the questions.
 
-# Answering the Questions
+## Answering the Questions
 To answer the first question — What are the most popular three articles of all time? — take the following steps:
 
 *Step 1)* Create a view slug with the times and the slug cut out from the url (i.e. everything after last / ). This will set us up to join the articles table on the slug. 
@@ -88,7 +88,7 @@ ORDER BY totals.date;
 *Step 5)* Run query showing the days from the view created above.
 SELECT date from error_date;
 
-# Running the program
+## Running the program
 To run the program, use python3 news_queries.py
 
 
