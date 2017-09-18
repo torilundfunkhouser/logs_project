@@ -3,34 +3,44 @@
 
 import psycopg2
 
-# Prints most popular three articles of all time
-
 db = psycopg2.connect(database="news")
 
-cursor1 = db.cursor()
-cursor1.execute("""SELECT title FROM slug_title
+
+# Returns most popular three articles of all time
+def print_top_articles():
+    cursor1 = db.cursor()
+    cursor1.execute("""SELECT title FROM slug_title
                 GROUP BY title ORDER BY COUNT(title) DESC Limit 3""")
-result = cursor1.fetchall()
-x = result
-print("The top three articles of all time are: %s!" % x)
+    result = cursor1.fetchall()
+    print "The the most popular articles of all time are: "
+    for result in result:
+        print "--" + str(result).translate(None, "'[](),")
 
 
-# Prints the most popular article authors of all time
+# Returns most popular three authors of all time
+def print_popular_authors():
+    cursor1 = db.cursor()
+    cursor1.execute("""SELECT author_name_times.name FROM author_name_times
+                    GROUP BY author_name_times.name ORDER BY
+                    COUNT(author_name_times.name) DESC Limit 3
+                    """)
+    result = cursor1.fetchall()
+    print "The the most popular articles of all time are: "
+    for result in result:
+        print "--" + str(result).translate(None, "'[](),")
 
-cursor1 = db.cursor()
-cursor1.execute("""SELECT author_name_times.name FROM author_name_times
-                GROUP BY author_name_times.name ORDER BY
-                COUNT(author_name_times.name) DESC Limit 3
-                """)
-result = cursor1.fetchall()
-x = result
-print("The most popular article authors of all time are: %s!" % x)
 
+# Returns date(s) with more than 1% of GET request errors
+def print_error_days():
+    cursor1 = db.cursor()
+    cursor1.execute('SELECT date from error_date')
+    result = cursor1.fetchall()
+    print "On this/these date(s) more than 1% of requests returned errors: "
+    for result in result:
+        print "--" + str(result).translate(None, "'[](),")
 
-# Prints the day(s) on which more than 1% of requests lead to errors
-
-cursor1 = db.cursor()
-cursor1.execute('SELECT date from error_date')
-result = cursor1.fetchall()
-print("On this day more than 1% of requests led to errors:")
-print(result)
+# Prints results for each query
+if __name__ == '__main__':
+    print_top_articles()
+    print_popular_authors()
+    print_error_days()
