@@ -25,7 +25,7 @@ def print_popular_authors():
                     COUNT(author_name_times.name) DESC Limit 3
                     """)
     result = cursor1.fetchall()
-    print "The the most popular articles of all time are: "
+    print "The most popular articles of all time are: "
     for result in result:
         print "--" + str(result).translate(None, "'[](),")
 
