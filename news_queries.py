@@ -12,7 +12,7 @@ def print_top_articles():
     cursor1.execute("""SELECT title FROM slug_title
                 GROUP BY title ORDER BY COUNT(title) DESC Limit 3""")
     result = cursor1.fetchall()
-    print "The the most popular articles of all time are: "
+    print "The most popular articles of all time are: "
     for result in result:
         print "--" + str(result).translate(None, "'[](),")
 
