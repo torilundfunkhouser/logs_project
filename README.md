@@ -10,7 +10,7 @@ To do this, we had to connect to a database, use SQL queries to analyze the log 
 ## Setting up the project
 1. Install vagrant (https://www.vagrantup.com/) and virtual box (https://www.virtualbox.org/wiki/Downloads) 
 2. Download the vagrant configuration files (FSND Virtual Machine - udacity logs projects). Save the folder on your desktop.
-3. Download the newsdata.sql file and place it into the vagrant directory
+3. Download the newsdata.sql file from this github project and place it into the vagrant directory
 4. cd into your vagrant directory
 5. vagrant up
 6. vagrant ssh
@@ -90,7 +90,6 @@ SELECT date from error_date;
 
 ## Running the program
 To run the program, use python news_queries.py
-
 
 
 
