@@ -89,7 +89,7 @@ ORDER BY totals.date;
 SELECT date from error_date;
 
 ## Running the program
-To run the program, use python3 news_queries.py
+To run the program, use python news_queries.py
 
 
 
