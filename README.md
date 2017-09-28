@@ -61,7 +61,12 @@ Limit 3;
 
 Finally, to answer the third question — On which days did more than 1% of requests lead to errors?— I took the following steps:
 
-*Step 1)* Create view errors with columns of counts matched with days where status != 200 OK.
+*Step 1)* Create view with the date extracted from the status column.
+CREATE VIEW date AS
+SELECT SUBSTRING(CAST(time AS VARCHAR(100)), 0, 11) as day, status
+FROM log AS date;
+
+*Step 2)* Create view errors with columns of counts matched with days where status != 200 OK.
 CREATE VIEW errors AS
 SELECT count(*) AS COUNT,
        date.day AS date
@@ -70,7 +75,7 @@ WHERE status!='200 OK'
 GROUP BY day
 ORDER BY COUNT DESC;
 
-*Step 2)* Create view totals with columns of counts matched with days where status = 200 OK.
+*Step 3)* Create view totals with columns of counts matched with days where status = 200 OK.
 CREATE VIEW totals AS 
 SELECT count(*) AS COUNT,
        date.day AS date
