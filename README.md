@@ -21,19 +21,20 @@ After taking these steps, you should be all set up to start answering the questi
 ## Answering the Questions
 To answer the first question — What are the most popular three articles of all time? — take the following steps:
 
-*Step 1)* Create a view slug with the times and the slug cut out from the url (i.e. everything after last / ). This will set us up to join the articles table on the slug. 
+## First Question
+### Step 1) Create a view slug with the times and the slug cut out from the url (i.e. everything after last / ). This will set us up to join the articles table on the slug. 
 
 CREATE VIEW Slug AS
 SELECT SUBSTRING(path, 10) as short_path, time from log;
 
-*Step 2)* Create a view slug_title with times, article titles, and slug by joining on the slug.
+### Step 2) Create a view slug_title with times, article titles, and slug by joining on the slug.
 
 CREATE VIEW slug_title AS
 SELECT Slug.short_path, Slug.time, articles.title
 FROM Slug
 INNER JOIN articles ON articles.slug=Slug.short_path;
 
-*Step 3)* Create view selecting the titles from the slug_title table, and the counts of how often those titles appeared.
+### Step 3) Create view selecting the titles from the slug_title table, and the counts of how often those titles appeared.
 
 CREATE VIEW articles_count AS
 SELECT COUNT(title), title
@@ -41,27 +42,28 @@ FROM slug_title
 GROUP BY title
 Limit 3;
 
-*Step 4)* Select top three counts and authors from articles_test.
+### Step 4) Select top three counts and authors from articles_test.
 
 SELECT * from articles_count limit 3;
 
+## Second Question
 To answer the second question — Who are the most popular article authors of all time? — I took the following steps:
 
-*Step 1)* Create a view with author name and slug by joining on author ID from the articles and authors tables.
+### Step 1) Create a view with author name and slug by joining on author ID from the articles and authors tables.
 
 CREATE VIEW author_name_article AS
 SELECT authors.name, articles.slug
 FROM articles
 INNER JOIN authors ON articles.author=authors.id;
 
-*Step 2)* Create a view with author name and slug, joining on the slug from the new author_name view and logs table. 
+### Step 2) Create a view with author name and slug, joining on the slug from the new author_name view and logs table. 
 
 CREATE VIEW author_name_times AS 
 SELECT author_name_article.name, slug_title.short_path
 FROM slug_title
 INNER JOIN author_name_article ON slug_title.short_path=author_name_article.slug;
 
-*Step 3)* Run query counting the number of times the path appears in the author_name_times view. Sort by author name with most often seen author on top, then select the top three author names. 
+### Step 3) Run query counting the number of times the path appears in the author_name_times view. Sort by author name with most often seen author on top, then select the top three author names. 
 
 CREATE VIEW authors_count AS
 SELECT COUNT(author_name_times.name), author_name_times.name
@@ -69,19 +71,20 @@ FROM author_name_times
 GROUP BY author_name_times.name
 ORDER BY COUNT(author_name_times.name) DESC;
 
-*Step 4)* Select top three counts and authors from authors_count.
+### Step 4) Select top three counts and authors from authors_count.
 
 SELECT * from authors_count limit 3;
 
+## Third Question
 Finally, to answer the third question — On which days did more than 1% of requests lead to errors?— I took the following steps:
 
-*Step 1)* Create view with the date extracted from the status column.
+### Step 1) Create view with the date extracted from the status column.
 
 CREATE VIEW date AS
 SELECT SUBSTRING(CAST(time AS VARCHAR(100)), 0, 11) as day, status
 FROM log AS date;
 
-*Step 2)* Create view errors with columns of counts matched with days where status != 200 OK.
+### Step 2) Create view errors with columns of counts matched with days where status != 200 OK.
 
 CREATE VIEW errors AS
 SELECT count(*) AS COUNT,
@@ -91,7 +94,7 @@ WHERE status!='200 OK'
 GROUP BY day
 ORDER BY COUNT DESC;
 
-*Step 3)* Create view totals with columns of counts matched with days where status = 200 OK.
+### Step 3) Create view totals with columns of counts matched with days where status = 200 OK.
 
 CREATE VIEW totals AS 
 SELECT count(*) AS COUNT,
@@ -100,7 +103,7 @@ FROM date
 GROUP BY day
 ORDER BY COUNT DESC;
 
-*Step 4)* Create view counting the number of days that the percentage of errors (i.e. errors / totals * 100) was greater than 1%.
+### Step 4) Create view counting the number of days that the percentage of errors (i.e. errors / totals * 100) was greater than 1%.
 CREATE VIEW error_date AS
 
 SELECT totals.date, (100.0*errors.count/totals.count) AS percentage
@@ -108,7 +111,7 @@ FROM errors, totals
 WHERE errors.date=totals.date AND (100.0*errors.count/totals.count) >1
 ORDER BY totals.date;
 
-*Step 5)* Run query showing the days from the view created above.
+### Step 5) Run query showing the days from the view created above.
 
 SELECT date from error_date;
 
