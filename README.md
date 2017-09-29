@@ -31,12 +31,15 @@ SELECT Slug.short_path, Slug.time, articles.title
 FROM Slug
 INNER JOIN articles ON articles.slug=Slug.short_path;
 
-*Step 3)* Run query selecting the titles from the slug_title table, ordered by the count of the article titles accessed most often. Limit 3 to show the top three article titles. 
-SELECT title
+*Step 3)* Create view selecting the titles from the slug_title table, and the counts of how often those titles appeared.
+CREATE VIEW articles_count AS
+SELECT COUNT(title), title
 FROM slug_title
 GROUP BY title
-ORDER BY COUNT(title) DESC
 Limit 3;
+
+*Step 4)* Select top three counts and authors from articles_test.
+SELECT * from articles_count limit 3;
 
 To answer the second question — Who are the most popular article authors of all time? — I took the following steps:
 
@@ -53,11 +56,14 @@ FROM slug_title
 INNER JOIN author_name_article ON slug_title.short_path=author_name_article.slug;
 
 *Step 3)* Run query counting the number of times the path appears in the author_name_times view. Sort by author name with most often seen author on top, then select the top three author names. 
-SELECT author_name_times.name
+CREATE VIEW authors_count AS
+SELECT COUNT(author_name_times.name), author_name_times.name
 FROM author_name_times
 GROUP BY author_name_times.name
-ORDER BY COUNT(author_name_times.name) DESC
-Limit 3;
+ORDER BY COUNT(author_name_times.name) DESC;
+
+*Step 4)* Select top three counts and authors from authors_count.
+SELECT * from authors_count limit 3;
 
 Finally, to answer the third question — On which days did more than 1% of requests lead to errors?— I took the following steps:
 
